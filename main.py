@@ -22,20 +22,37 @@ def hand_value(hand):
   return value
 
 # Classes
-class aiOneClass:
-  
-  def __init__(self):
-    self.self = self
-    self.hand = []
-
-  def draw(self):
-    cardDrawOne = random.choice(deck)
-    self.hand.append(deck[deck.index(cardDrawOne)])
-    deck.pop(deck.index(cardDrawOne))
+class ais:
     
-    cardDrawTwo = random.choice(deck)
-    self.hand.append(deck[deck.index(cardDrawTwo)])
-    deck.pop(deck.index(cardDrawOne))
+    def __init__(self):
+        self.self = self
+        self.handOne = []
+        self.handTwo = []
+        self.valueOne = 0
+        self.valueTwo = 0
+        
+    def draw_card(self, handDrawTo):
+        global deck
+        
+        cardDraw = random.choice(deck)
+        handDrawTo.append(deck[deck.index(cardDraw)])
+        deck.pop(deck.index(cardDraw))
+        
+        if handDrawTo[0] == "ace" and self.handDrawTo:
+            
+        
+    def populate_hands(self):
+        draw_card(self.handOne)
+        draw_card(self.handOne)
+        
+        draw_card(self.handTwo)
+        draw_card(self.handTwo)
+        
+        
+        
+    def player_move_one(self):
+        
+    
     
   def make_move(self, handValue):
     if handValue < 17:
