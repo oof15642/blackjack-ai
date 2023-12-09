@@ -10,17 +10,17 @@ deck = [[rank, suit] for suit in suits for rank in ranks]
 
 # Functions
 def hand_value(hand):
-	value = 0
+	valueTemp = 0
 	for card in hand:
 		if card[0] != "ace":
-			value += int(card[0])
+			valueTemp += int(card[0])
 		else:
-			if value + 11 > 21:
-				value += 1
+			if valueTemp + 11 > 21:
+				valueTemp += 1
 			else:
-				value += 11
+				valueTemp += 11
 
-	return value
+	return valueTemp
 
 
 # Classes
@@ -40,16 +40,6 @@ class Ai:
 		self.hand.append(deck[deck.index(cardDraw)])
 		deck.pop(deck.index(cardDraw))
 
-		for card in self.hand:
-			if str(card[0]) != "ace":
-				self.value += int(cardDraw[0])
-
-			elif self.value + 11 > 21:
-				self.value += 1
-
-			else:
-				self.value += 11
-
 	def dealer_moves(self):
 		while self.value <= 17:
 			self.draw_card()
@@ -58,6 +48,8 @@ class Ai:
 	def populate_hand(self):
 		self.draw_card()
 		self.draw_card()
+
+		
 
 ### Game Class ###
 class Game():
@@ -68,13 +60,19 @@ class Game():
 	def play(self):
 		aiDealer = Ai()
 		aiPlayer = Ai()
-
+		
 		aiDealer.populate_hand()
 		aiPlayer.populate_hand()
 
+		aiDealer.value = hand_value(aiDealer.hand)
+		
+		
+		hand_value(aiPlayer.hand)
 		
 		while aiDealer.value <= 21:
 			aiDealer.dealer_moves()
+			aiDealer.value = hand_value(aiDealer.hand)
+			print(aiDealer.value)
 			print(aiDealer.hand)
 			sleep(1)
 	
