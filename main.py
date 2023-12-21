@@ -8,6 +8,14 @@ ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "10", "10", "10", "10", "ace"]
 
 deck = [[rank, suit] for suit in suits for rank in ranks]
 
+gameContinue = True
+
+# change these to costomize game
+hitOn17 = False
+moneyAmount = 10_000
+initialBet = 10
+pot = 0
+
 # Functions
 def hand_value(hand):
 	valueTemp = 0
@@ -40,11 +48,40 @@ class Ai:
 		self.hand.append(deck[deck.index(cardDraw)])
 		deck.pop(deck.index(cardDraw))
 
+	def bet(self):
+		print(f"player bets ${initialBet}")
+		pot += initialBet
+
 	def dealer_moves(self):
-		while self.value <= 17:
+		if self.value <= 17:
 			self.draw_card()
-			return self.value
+		return self.value
 		
+	def player_moves(self, dealerHand):
+		global gameContinue
+
+		showingCard = dealerHand[0][0] # dealers first card that is showing to the player
+
+		if self.value == 21:
+			print("player has blackjack")
+			gameContinue = False
+
+		if self.value == 17 and hitOn17:
+			self.draw_card()
+
+		elif self.value == 17 and hitOn17 == False:
+			print("player stands")
+			gameContinue = False
+
+		elif self.value <= 16 and showingCard + 10 >= 17:
+			self.draw_card()
+
+		elif self.value > 17:
+			print("player stands")
+			gameContinue = False
+
+
+
 	def populate_hand(self):
 		self.draw_card()
 		self.draw_card()
@@ -58,6 +95,8 @@ class Game():
 		self.self = self
 
 	def play(self):
+		global gameContinue
+
 		aiDealer = Ai()
 		aiPlayer = Ai()
 		
@@ -65,16 +104,23 @@ class Game():
 		aiPlayer.populate_hand()
 
 		aiDealer.value = hand_value(aiDealer.hand)
-		
-		
-		hand_value(aiPlayer.hand)
-		
-		while aiDealer.value <= 21:
-			aiDealer.dealer_moves()
-			aiDealer.value = hand_value(aiDealer.hand)
-			print(aiDealer.value)
-			print(aiDealer.hand)
+		aiPlayer.value = hand_value(aiPlayer.hand)
+
+		while aiPlayer.value < 21 and gameContinue:
+			print(aiPlayer.value)
+			print(aiPlayer.hand)
 			sleep(1)
+			aiPlayer.dealer_moves()
+			aiPlayer.value = hand_value(aiPlayer.hand)
+
+		
+		#while aiDealer.value <= 21:
+		#	print(aiDealer.value)
+		#	print(aiDealer.hand)
+		#	sleep(1)
+		#	aiDealer.dealer_moves()
+		#	aiDealer.value = hand_value(aiDealer.hand)
+			
 	
 # Game run
 initGame = Game()
