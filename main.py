@@ -59,6 +59,7 @@ class Ai:
 		
 	def player_moves(self, dealerHand):
 		global gameContinue
+		global hitOn17
 
 		showingCard = dealerHand[0][0] # dealers first card that is showing to the player
 
@@ -69,6 +70,10 @@ class Ai:
 		if self.value == 17 and hitOn17:
 			self.draw_card()
 
+		if self.value > 17:
+			print("player stands")
+			gameContinue = False
+
 		elif self.value == 17 and hitOn17 == False:
 			print("player stands")
 			gameContinue = False
@@ -76,9 +81,7 @@ class Ai:
 		elif self.value <= 16 and showingCard + 10 >= 17:
 			self.draw_card()
 
-		elif self.value > 17:
-			print("player stands")
-			gameContinue = False
+		
 
 
 
@@ -106,7 +109,13 @@ class Game():
 		aiDealer.value = hand_value(aiDealer.hand)
 		aiPlayer.value = hand_value(aiPlayer.hand)
 
+		if aiDealer.value == 21 or aiPlayer.value == 21:
+			print()
+		
 		while aiPlayer.value < 21 and gameContinue:
+			print(gameContinue)
+			print(aiDealer.hand)
+
 			print(aiPlayer.value)
 			print(aiPlayer.hand)
 			sleep(1)
