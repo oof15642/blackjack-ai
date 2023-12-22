@@ -15,6 +15,7 @@ hitOn17 = False
 moneyAmount = 10_000
 initialBet = 10
 pot = 0
+betPercent = 10
 
 # Functions
 def hand_value(hand):
@@ -49,6 +50,12 @@ class Ai:
 		deck.pop(deck.index(cardDraw))
 
 	def bet(self):
+		global pot
+		global initialBet
+		global moneyAmount
+
+		initialBet = 0.10 * moneyAmount
+
 		print(f"player bets ${initialBet}")
 		pot += initialBet
 
@@ -63,23 +70,20 @@ class Ai:
 
 		showingCard = dealerHand[0][0] # dealers first card that is showing to the player
 
-		if self.value == 21:
-			print("player has blackjack")
-			gameContinue = False
-
 		if self.value == 17 and hitOn17:
 			self.draw_card()
-
-		if self.value > 17:
-			print("player stands")
-			gameContinue = False
-
 		elif self.value == 17 and hitOn17 == False:
 			print("player stands")
 			gameContinue = False
 
-		elif self.value <= 16 and showingCard + 10 >= 17:
+		if self.value > 17:
+			print("player stands")
+			gameContinue = False
+		elif self.value < 17 and int(showingCard) + 10 >= 17:
 			self.draw_card()
+		elif self.value < 17 and self.value > 13:
+			self.draw_card()
+
 
 		
 
@@ -113,13 +117,11 @@ class Game():
 			print()
 		
 		while aiPlayer.value < 21 and gameContinue:
-			print(gameContinue)
-			print(aiDealer.hand)
-
+			print(aiDealer.value)
 			print(aiPlayer.value)
 			print(aiPlayer.hand)
 			sleep(1)
-			aiPlayer.dealer_moves()
+			aiPlayer.player_moves(aiDealer.hand)
 			aiPlayer.value = hand_value(aiPlayer.hand)
 
 		
